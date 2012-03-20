@@ -1376,6 +1376,16 @@ static int class_read(struct policydb *p, struct hashtab *h, void *fp)
 		cladatum->default_type = le32_to_cpu(buf[0]);
 	}
 
+	if (p->policyvers >= POLICYDB_VERSION_NEW_OBJECT_DEFAULTS) {
+		rc = next_entry(buf, fp, sizeof(u32) * 3);
+		if (rc)
+			goto bad;
+
+		cladatum->default_user = le32_to_cpu(buf[0]);
+		cladatum->default_role = le32_to_cpu(buf[1]);
+		cladatum->default_range = le32_to_cpu(buf[2]);
+	}
+
 	rc = hashtab_insert(h, key, cladatum);
 	if (rc)
 		goto bad;
@@ -2932,13 +2942,6 @@ static int class_write(void *vkey, void *datum, void *ptr)
 		buf[2] = cpu_to_le32(cladatum->default_range);
 
 		rc = put_entry(buf, sizeof(uint32_t), 3, fp);
-		if (rc)
-			return rc;
-	}
-
-	if (p->policyvers >= POLICYDB_VERSION_DEFAULT_TYPE) {
-		buf[0] = cpu_to_le32(cladatum->default_type);
-		rc = put_entry(buf, sizeof(uint32_t), 1, fp);
 		if (rc)
 			return rc;
 	}
