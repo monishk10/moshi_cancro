@@ -243,7 +243,6 @@ config CPU_BOOST
 
 	  If in doubt, say N.
 
-
 config CPU_FREQ_GOV_ONDEMANDPLUS
 	tristate "'ondemandplus' cpufreq governor"
 	depends on CPU_FREQ
