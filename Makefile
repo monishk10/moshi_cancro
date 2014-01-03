@@ -357,10 +357,11 @@ MODFLAGS        = -DMODULE \
 
 CFLAGS_MODULE   = $(MODFLAGS)
 AFLAGS_MODULE   = $(MODFLAGS)
-LDFLAGS_MODULE  = -T $(srctree)/scripts/module-common.lds
+LDFLAGS_MODULE  = -T $(srctree)/scripts/module-common.lds \
+		  --strip-debug
 CFLAGS_KERNEL   = -mfpu=neon-vfpv4 \
                   -mtune=cortex-a15 \
-                  -O2 \
+                  -O3 \
                   -fgcse-las \
                   -fpredictive-commoning \
 		  -Wno-error=implicit-function-declaration \
@@ -368,7 +369,7 @@ CFLAGS_KERNEL   = -mfpu=neon-vfpv4 \
 		  
 AFLAGS_KERNEL	= -mfpu=neon-vfpv4 \
                   -mtune=cortex-a15 \
-                  -O2 \
+                  -O3 \
                   -fgcse-las \
                   -fpredictive-commoning \
 		  -Wno-error=implicit-function-declaration \
@@ -591,7 +592,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS	+= -Ofast
+KBUILD_CFLAGS	+= -O3 -fmodulo-sched -fmodulo-sched-allow-regmoves -fno-tree-vectorize
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
