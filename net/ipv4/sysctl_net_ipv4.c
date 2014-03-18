@@ -1,3 +1,4 @@
+
 /*
  * sysctl_net_ipv4.c: sysctl interface to net IPV4 subsystem.
  *
@@ -820,13 +821,6 @@ static struct ctl_table ipv4_net_table[] = {
 	{
 		.procname	= "fwmark_reflect",
 		.data		= &init_net.ipv4.sysctl_fwmark_reflect,
-		.maxlen		= sizeof(int),
-		.mode		= 0644,
-		.proc_handler	= proc_dointvec,
-	},
-	{
-		.procname	= "tcp_fwmark_accept",
-		.data		= &init_net.ipv4.sysctl_tcp_fwmark_accept,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec,
