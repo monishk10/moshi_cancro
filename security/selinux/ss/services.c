@@ -1002,7 +1002,6 @@ void security_compute_operation(u32 ssid,
 	read_lock(&policy_rwlock);
 	if (!ss_initialized)
 		goto allow;
-
 	scontext = sidtab_search(&sidtab, ssid);
 	if (!scontext) {
 		printk(KERN_ERR "SELinux: %s:  unrecognized SID %d\n",
