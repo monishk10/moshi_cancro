@@ -141,6 +141,84 @@ int xo_auto_detect(u32 reg)
 	}
 }
 
+int wcnss_get_iris_name(char *iris_name)
+{
+	struct wcnss_wlan_config *cfg = NULL;
+	int iris_id;
+
+	cfg = wcnss_get_wlan_config();
+
+	if (cfg) {
+		iris_id = cfg->iris_id;
+		iris_id = iris_id >> 16;
+	} else {
+		return 1;
+	}
+
+	switch (iris_id) {
+	case WCN3660:
+		memcpy(iris_name, "WCN3660", sizeof("WCN3660"));
+		break;
+	case WCN3660A:
+		memcpy(iris_name, "WCN3660A", sizeof("WCN3660A"));
+		break;
+	case WCN3660B:
+		memcpy(iris_name, "WCN3660B", sizeof("WCN3660B"));
+		break;
+	case WCN3620:
+		memcpy(iris_name, "WCN3620", sizeof("WCN3620"));
+		break;
+	case WCN3620A:
+		memcpy(iris_name, "WCN3620A", sizeof("WCN3620A"));
+		break;
+	case WCN3610:
+		memcpy(iris_name, "WCN3610", sizeof("WCN3610"));
+		break;
+	case WCN3610V1:
+		memcpy(iris_name, "WCN3610V1", sizeof("WCN3610V1"));
+		break;
+	default:
+		return 1;
+	}
+
+	return 0;
+}
+EXPORT_SYMBOL(wcnss_get_iris_name);
+
+int validate_iris_chip_id(u32 reg)
+{
+	int iris_id;
+	iris_id = reg >> 16;
+
+	switch (iris_id) {
+	case WCN3660:
+	case WCN3660A:
+	case WCN3660B:
+	case WCN3620:
+	case WCN3620A:
+	case WCN3610:
+		return 0;
+	default:
+		return 1;
+	}
+}
+
+void  wcnss_iris_reset(u32 reg, void __iomem *pmu_conf_reg)
+{
+	/* Reset IRIS */
+	reg |= WCNSS_PMU_CFG_IRIS_RESET;
+	writel_relaxed(reg, pmu_conf_reg);
+
+	/* Wait for PMU_CFG.iris_reg_reset_sts */
+	while (readl_relaxed(pmu_conf_reg) &
+			WCNSS_PMU_CFG_IRIS_RESET_STS)
+		cpu_relax();
+
+	/* Reset iris reset bit */
+	reg &= ~WCNSS_PMU_CFG_IRIS_RESET;
+	writel_relaxed(reg, pmu_conf_reg);
+}
+
 static int configure_iris_xo(struct device *dev, bool use_48mhz_xo, int on,
 			int *iris_xo_set)
 {
@@ -156,6 +234,9 @@ static int configure_iris_xo(struct device *dev, bool use_48mhz_xo, int on,
 	void __iomem *iris_read_reg;
 	struct clk *clk;
 	struct clk *clk_rf = NULL;
+        struct wcnss_wlan_config *cfg = NULL;
+
+        cfg = wcnss_get_wlan_config();
 
 	if (wcnss_hardware_type() == WCNSS_PRONTO_HW) {
 		wcnss_phys_addr = MSM_PRONTO_PHYS;
@@ -244,6 +325,9 @@ static int configure_iris_xo(struct device *dev, bool use_48mhz_xo, int on,
 			auto_detect = WCNSS_XO_48MHZ;
 		else
 			auto_detect = WCNSS_XO_INVALID;
+
+                if (cfg != NULL)
+		    cfg->iris_id = iris_reg;
 
 		/* Clear XO_MODE[b2:b1] bits. Clear implies 19.2 MHz TCXO */
 		reg &= ~(WCNSS_PMU_CFG_IRIS_XO_MODE);
