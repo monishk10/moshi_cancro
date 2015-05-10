@@ -231,18 +231,10 @@ ENTRY(v7_coherent_user_range)
 	sub	r3, r2, #1
 	bic	r12, r0, r3
 2:
-<<<<<<< HEAD
- USER(	mcr	p15, 0, r12, c7, c5, 1	)	@ invalidate I line
-	add	r12, r12, r2
-	cmp	r12, r1
-	blo	2b
-3:
-=======
  USER(        mcr        p15, 0, r12, c7, c5, 1        )        @ invalidate I line
         add        r12, r12, r2
         cmp        r12, r1
         blo        2b
->>>>>>> a00b7fc... ARM: unbreak cacheflush cache-v7
         mov        r0, #0
         ALT_SMP(mcr        p15, 0, r0, c7, c1, 6)        @ invalidate BTB Inner Shareable
         ALT_UP(mcr        p15, 0, r0, c7, c5, 6)        @ invalidate BTB
@@ -255,20 +247,8 @@ ENTRY(v7_coherent_user_range)
  * isn't mapped, fail with -EFAULT.
  */
 9001:
-<<<<<<< HEAD
-	mov	r12, r12, lsr #12
-	mov	r12, r12, lsl #12
-	add	r12, r12, #4096
-	b	3b
- UNWIND(.fnend		)
-        mov        r12, r12, lsr #12
-        mov        r12, r12, lsl #12
-        add        r12, r12, #4096
-        b        3b
-=======
         mov        r0, #-EFAULT
         mov        pc, lr
->>>>>>> a00b7fc... ARM: unbreak cacheflush cache-v7
  UNWIND(.fnend                )
 ENDPROC(v7_coherent_kern_range)
 ENDPROC(v7_coherent_user_range)

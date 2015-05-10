@@ -3058,7 +3058,6 @@ config HAS_MACH_MEMUTILS
 	help
 	Faster memcpy performance for Krait
 
-<<<<<<< HEAD
 config FORCE_FAST_CHARGE
 	bool "Force AC charge mode at will"
 	default y
@@ -3066,6 +3065,4 @@ config FORCE_FAST_CHARGE
 		A simple sysfs interface to force adapters that
 		are detected as USB to charge as AC.
 
-=======
->>>>>>> 5ca99d6... msm: memutils:  memcpy, memmove, copy_page optimization
 endif

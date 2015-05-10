@@ -103,6 +103,7 @@ make_zip
 else
 echo -e "Error Occurred"
 echo -e "zImage not found"
+exit 1
 fi
 ;;
 dirty)
@@ -113,6 +114,7 @@ make_zip
 else
 echo -e "Error Occurred"
 echo -e "zImage not found"
+exit 1
 fi
 ;;
 *)
