@@ -3093,11 +3093,13 @@ config ALUCARD_HOTPLUG
 
 config PVS_LEVEL_INTERFACE
 	bool "Expose PVS level information in sys fs (Boeffla-Kernel)"
+	default y
 	help
 	 Allow PVS level to be shown in Boeffla-Config app
 
 config SPEED_LEVEL_INTERFACE
         bool "Expose SPEED level information in sys fs"
+	default y
         help
          Allow SPEED level to be shown into specific kernel apps
 
