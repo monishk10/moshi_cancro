@@ -116,13 +116,13 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	  loading your cpufreq low-level hardware driver, using the
 	  'interactive' governor for latency-sensitive workloads.
 
-
 config CPU_FREQ_DEFAULT_GOV_ONDEMANDPLUS
 	bool "ondemandplus"
 	select CPU_FREQ_GOV_ONDEMANDPLUS
 	help
-	  Use the CPUFreq governor 'ondemandplus' as default.
+	Use the CPUFreq governor 'ondemandplus' as default.
 
+endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
 	tristate "'performance' governor"
@@ -243,12 +243,12 @@ config CPU_BOOST
 
 	  If in doubt, say N.
 
-	  
+
 config CPU_FREQ_GOV_ONDEMANDPLUS
 	tristate "'ondemandplus' cpufreq governor"
 	depends on CPU_FREQ
 	help
-	  Ondemandplus	  
+	  'ondemandplus' - better ondemand	  
             
 menu "x86 CPU frequency scaling drivers"
 depends on X86
