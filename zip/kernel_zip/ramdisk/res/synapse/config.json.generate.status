@@ -1,0 +1,90 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+	name:Dashboard,
+	elements:[
+	{ SDescription:{
+                description:"Simple Dashboard interface."
+        }},
+	{ SPane:{
+		title:"CPU Activity",
+		description:"Live CPU status."
+	}},
+	{ SLiveLabel:{
+		refresh:800,
+		action:"show cpufreq"
+	}},
+	{ SPane:{
+		title:"Thermal Activity",
+		description:"Thermal activity monitoring, values are read from thermal measure points."
+	}},
+	{ SLiveLabel:{
+		refresh:2000,
+		action:"show temp"
+	}},
+	{ SPane:{
+		title:"Memory",
+		description:"Total amount of Memory system has and shows how much is used/allocated."
+	}},
+	{ SLiveLabel:{
+		refresh:2000,
+		action:"show memory"
+	}},
+	{ SPane:{
+		title:"Time in States",
+		description:"Tells how much time the CPU spent on a specific frequency."
+	}},
+	{ SLiveLabel:{
+		refresh:0,
+		action:"show LiveTime 0 9"
+	}},
+	{ SLiveLabel:{
+		refresh:0,
+		action:"show LiveTime 10 19"
+	}},
+	{ SPane:{
+		title:"Unused States",
+		description:"Unused CPU frequencies."
+	}},
+	{ SLiveLabel:{
+		refresh:0,
+		action:"show LiveUnUsed"
+	}},
+	{ SPane:{
+		title:"Uptime",
+		description:"Tells how long the system was up."
+	}},
+	{ SLiveLabel:{
+		refresh:0,
+		action:"show LiveUpTime"
+	}},
+      	{ SPane:{
+		title:"Kernel Entropy",
+		description:"Live Entropy level across the system from RNG(Random Number Generator) sources."
+      	}},
+	{ SLiveLabel:{
+		title:"Entropy Available",
+		style:italic,
+		refresh:2000,
+		action:"show entropy"
+	}},
+	{ SPane:{
+		title:"Battery Info",
+		description:"Essential details regarding your battery."
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"show battinfo"
+	}},
+        { STitleBar:{
+		title:"SELinux status",
+	}},
+	{ SLiveLabel:{
+		title:"Current SELinux state",
+		refresh:0,
+		action:"show selinux"
+	}},
+	]
+}
+CTAG

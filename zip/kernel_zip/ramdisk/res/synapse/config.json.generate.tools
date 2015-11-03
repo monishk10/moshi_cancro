@@ -1,0 +1,66 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:Tools,
+    elements:[
+	{ SDescription:{
+                description:"Built-in kernel tools for development use."
+        }},
+	{ STitleBar:{
+		title:"Configuration Profiles"
+	}},
+	{ SOptionList:{
+		title:"Selected Profile",
+        description:"Choose the settings backup you want and Apply your choice in Synapse before using the action buttons below.",
+		action:"tools pickconfig",
+        	default:"None",
+		values:[ "None",
+`
+			for BAK in \`/res/synapse/actions/tools listconfig\`; do
+			  echo "\"$BAK\","
+			done
+`
+			]
+	}},
+    	{ STitleBar:{
+		title:"Profile Management Actions",
+    	}},
+    	{ SButton:{
+		label:"Restore Selected Profile",
+		action:"tools applyconfig"
+	}},
+    	{ SButton:{
+		label:"Delete Selected Profile",
+		action:"tools delconfig"
+	}},
+	{ SButton:{
+		label:"Backup Current Profile",
+		action:"tools keepconfig"
+	}},
+    	{ SPane:{
+		title:"General Actions",
+        	description:"To update/refresh lists, select Restart Synapse below.",
+    	}},
+	{ SButton:{
+		label:"Restart Synapse",
+		action:"tools restart"
+	}},
+	{ SDescription:{
+		description:"Save the logcat (App/system debug), dmesg (active kernel output) or last_ksmg (same as dmesg but from the last shutdown)."
+	}},
+	{ SButton:{
+		label:"Save logcat",
+		action:"tools logcat"
+	}},
+	{ SButton:{
+		label:"Save dmesg",
+		action:"tools dmesg"
+	}},
+	{ SButton:{
+		label:"Save last_kmsg",
+		action:"tools kmsg"
+	}},
+    ]
+}
+CTAG

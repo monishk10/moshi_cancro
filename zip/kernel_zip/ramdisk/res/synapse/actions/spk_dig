@@ -1,0 +1,3 @@
+echo $1 > /sys/kernel/taiko/speaker/spkr_digigain
+
+echo "Done."

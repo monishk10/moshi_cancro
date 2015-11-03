@@ -1,0 +1,139 @@
+#!/system/bin/sh
+S2W_OPTS='0:"Disabled", 1:"Sweep-to-wake+Sweep-to-sleep", 2:"Sweep-to-sleep"'
+GES_OPTS='0:"Disabled", 1:"Enabled"'
+LOGGER='0:"Disabled", 1:"Enabled"'
+
+cat << CTAG
+{
+    name:Advanced,
+    elements:[
+	{ SDescription:{
+                description:"Configure Advanced kernel options/parameters."
+        }},
+	{ SPane:{
+		title:"Wireless Network Congestion control"
+	}},
+	{ SOptionList:{
+		title:"TCP Congestion control",
+		description:"Change network congestion to increase wireless performance.",
+		default:`cat /proc/sys/net/ipv4/tcp_congestion_control`,
+		action:"generic /proc/sys/net/ipv4/tcp_congestion_control",
+		values:[`while read values; do busybox printf "%s, \n" $values; done < /proc/sys/net/ipv4/tcp_available_congestion_control`]
+	}},
+      	{ SPane:{
+      		title:"Virtual Memory Settings",
+      		description:"Tune the operation of the VM subsystem of the Linux kernel and the writeout of dirty data to disk."
+      	}},
+	{ SSeekBar:{
+		title:"Dirty Background Ratio",
+		max:100, unit:"%",
+		default:`cat /proc/sys/vm/dirty_background_ratio`,
+		action:"generic /proc/sys/vm/dirty_background_ratio"
+	}},
+	{ SSeekBar:{
+		title:"Dirty Ratio",
+		max:100, unit:"%",
+		default:`cat /proc/sys/vm/dirty_ratio`,
+		action:"generic /proc/sys/vm/dirty_ratio"
+	}},
+	{ SSeekBar:{
+		title:"Dirty Expire Centisecs",
+		max:3000, step:50,
+		default:`cat /proc/sys/vm/dirty_expire_centisecs`,
+		action:"generic /proc/sys/vm/dirty_expire_centisecs"
+	}},
+	{ SSeekBar:{
+		title:"Dirty Writeback Centisecs",
+		max:3000, step:50,
+		default:`cat /proc/sys/vm/dirty_writeback_centisecs`,
+		action:"generic /proc/sys/vm/dirty_writeback_centisecs"
+	}},
+	{ SSeekBar:{
+		title:"VFS Cache Pressure",
+		max:200,
+		default:`cat /proc/sys/vm/vfs_cache_pressure`,
+		action:"generic /proc/sys/vm/vfs_cache_pressure"
+	}},
+    	{ SPane:{
+		title:"Vibration Intensity Control",
+    	}},
+	{ SSeekBar:{
+		title:"Vibration Intensity Control",
+		description:"Adjust the vibrator intensity output.",
+		max:100,
+		min:20,
+		step:5,
+		unit:" %",
+		default:`cat /sys/vibrator/pwmvalue`,
+		action:"generic /sys/vibrator/pwmvalue"
+	}},
+	{ SButton:{
+		label:"Test vibration",
+		action:"echo 80 > /sys/class/timed_output/vibrator/enable",
+	}},
+    	{ SPane:{
+		title:"Panel Calibration Control",
+    	}},
+	{ SDescription:{
+		description:"Calibrate your screen colors to what you desire."
+	}},
+	{ SCheckBox:{
+		label:"Enable",
+		description:"Enables/Disables RGB Multiplier Control",
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_enable`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_enable",
+	}},
+    	{ SPane:{
+		title:"Calibration Values",
+    	}},
+	{ SGeneric:{
+		title:"KCAL",
+		description:"Controls R/G/B Multipliers",
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal",
+	}},
+	{ SCheckBox:{
+		label:"KCAL inverted colors",
+		description:"Enables/Disables Display Inversion Mode",
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_invert`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_invert"
+	}},
+	{ SSeekBar:{
+		title:"KCAL Min",
+		description:"Controls minimum RGB Multiplier value.",
+		min:0,
+		max:255,
+		step:1,
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_min`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_min"
+	}},
+	{ SSeekBar:{
+		title:"Contrast",
+		description:"Controls display contrast.",
+		min:128,
+		max:383,
+		step:1,
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_cont`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_cont",
+	}},
+	{ SSeekBar:{
+		title:"Hue",
+		description:"Controls display hue.",
+		min:0,
+		max:1536,
+		step:1,
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_hue`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_hue",
+	}},
+	{ SSeekBar:{
+		title:"Saturation",
+		description:"Controls saturation intensity. Move slider all the way to the left for grayscale mode.",
+		min:128,
+		max:383,
+		step:1,
+		default:`cat /sys/devices/platform/kcal_ctrl.0/kcal_sat`,
+		action:"generic /sys/devices/platform/kcal_ctrl.0/kcal_sat",
+	}},
+    ]
+}
+CTAG

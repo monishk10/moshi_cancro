@@ -1,0 +1,160 @@
+#!/system/bin/sh
+BB=/system/xbin/busybox;
+
+cat << CTAG
+{
+    	name:CPU,
+    	elements:[
+		{ SDescription:{
+        	        description:"Configure everything CPU related here to either increase performance or gain more battery-life."
+        	}},
+		{ SPane:{
+			title:"CPU Scaling Frequency Control"
+		}},
+		{ SSeekBar:{
+			title:"Set Maximum Core frequency",
+			description:"Control Maximum CPU clocks across all cores. Limit ONLY applies on frequencies above stock maximum frequency(1782mhz upwards)",
+			unit:" MHz",
+			weight:0.001,
+			action:"cpuset /sys/devices/system/cpu/cpu0/cpufreq/locked_max_limit",
+			values:[`while read values; do busybox printf "%s, \n" $values; done < /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies`]
+		}},
+		{ SPane:{
+			title:"CPU Governors"
+		}},
+		{ SOptionList:{
+			description:"Choose your desired CPU Governor(default is Ondemand).",
+			default:`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`,
+			action:"cpuset /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor",
+			values:[`while read values; do busybox printf "%s, \n" $values; done < /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors`],
+			notify:[	{
+						on:APPLY,
+						do:[ REFRESH, CANCEL ],
+						to:"/sys/devices/system/cpu/cpufreq"
+					},
+					{
+						on:REFRESH,
+						do:REFRESH,
+						to:"/sys/devices/system/cpu/cpufreq"
+					}
+				]
+		}},
+		{ SPane:{
+			title:"Governor Tunables"
+		}},
+		{ STreeDescriptor:{
+			path:"/sys/devices/system/cpu/cpufreq",
+			generic: {
+					directory: {
+						STreeDescriptor:{
+							generic: {
+								directory: {},
+								element: {
+									SGeneric: { title:"@BASENAME" }
+								}
+							},
+							exclude: [ "sampling_rate", "boostpulse", "input_event_min_freq", "two_phase_freq", "multi_phase_freq_tbl", "sampling_rate_min", "io_is_busy" ]
+						},
+					}
+				},
+			exclude: [ "overall_stats", "vdd_table" ]
+		}},
+		{ SButton:{
+			label:"Refresh Values",
+			action:"tools restart"
+		}},
+		{ SPane:{
+			title:"CPU Voltage Control",
+			description:"Too low voltage may cause instability and freezes. Note that the only advantage you get by undervolting is your unit can run alot cooler. Proceed with Caution!!"
+		}},
+		{ SPane:{
+			title:"Undervoltage Control(VDD_UV)",
+		}},
+		{ SButton:{
+			label:"Apply -5mv Undervolt",
+			action:"ovuv -5"
+		}},
+		{ SButton:{
+			label:"Apply -10mv Undervolt",
+			action:"ovuv -10"
+		}},
+		{ SButton:{
+			label:"Apply -15mv Undervolt",
+			action:"ovuv -15"
+		}},
+		{ SPane:{
+			title:"Overvoltage Control(VDD_UV)",
+		}},
+		{ SButton:{
+			label:"Apply +5mv Overvolt",
+			action:"ovuv 5"
+		}},
+		{ SButton:{
+			label:"Apply +10mv Overvolt",
+			action:"ovuv 10"
+		}},
+		{ SButton:{
+			label:"Apply +15mv Overvolt",
+			action:"ovuv 15"
+		}},
+		{ SPane:{
+			title:"Undercurrent Control(VDD_UA)",
+		}},
+		{ SButton:{
+			label:"Apply -4mA Undervolt",
+			action:"ua -4"
+		}},
+		{ SButton:{
+			label:"Apply -8mA Undervolt",
+			action:"ua -8"
+		}},
+		{ SButton:{
+			label:"Apply -12mA Undervolt",
+			action:"ua -12"
+		}},
+		{ SPane:{
+			title:"Overcurrent Control(VDD_UA)",
+		}},
+		{ SButton:{
+			label:"Apply +4mA Overcurrent",
+			action:"ua 4"
+		}},
+		{ SButton:{
+			label:"Apply +8mA Overcurrent",
+			action:"ua 8"
+		}},
+		{ SButton:{
+			label:"Apply +12mA Overcurrent",
+			action:"ua 12"
+		}},
+		{ SPane:{
+			title:"Voltage Table",
+		}},
+		{ SButton:{
+			label:"Show CPU voltage table",
+			action:"show cpu"
+		}},
+		{ SPane:{
+			title:"Enable Suspended Low power state",
+		}},
+		{ SGeneric:{
+			title:"Low Power state mode",
+			description:"Enable Low power state mode when Device is suspended.",
+			default:"cat /sys/kernel/krait_uv_info/krait_lps",
+			action:"generic /sys/kernel/krait_uv_info/krait_lps",
+		}},
+		{ SGeneric:{
+			title:"Voltage reduction",
+			description:"Set the amount of additional Undervolt when device suspends(multiples of 5).",
+			default:"cat /sys/kernel/krait_uv_info/krait_lps_uv",
+			action:"generic /sys/kernel/krait_uv_info/krait_lps_uv",
+		}},
+		{ SGeneric:{
+			title:"Current reduction",
+			description:"Set the amount of additional Undercurrent when device suspends(multiples of 4).",
+			default:"cat /sys/kernel/krait_uv_info/krait_lps_ua",
+			action:"generic /sys/kernel/krait_uv_info/krait_lps_ua",
+		}},
+    	]
+}
+CTAG

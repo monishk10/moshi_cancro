@@ -1,0 +1,89 @@
+#!/system/bin/sh
+BB=/system/xbin/busybox;
+
+cat << CTAG
+{
+    	name:T.A. - Mod,
+    	elements:[
+		{ SDescription:{
+        	        description:"Tapan Audio mod controls. \nNote: Enabling advanced Controls on this page, You hereby acknowledge that I do not have any Liability for any Hearing or Hardware damage you may experience!!\n"
+        	}},
+		{ SPane:{
+			title:"Headphones",
+        	        description:"Tapan Headphone controls."
+        	}},
+		{ STitleBar:{
+			title:"Enable Controls"
+		}},
+		{ SButton:{
+			label:"Enable Digital gain control",
+			action:"taiko_digi on"
+		}},
+		{ STitleBar:{
+			title:"Disable Controls"
+		}},
+		{ SButton:{
+			label:"Disable Digital gain control",
+			action:"taiko_digi off"
+		}},
+		{ SPane:{
+			title:"Digital Gain control",
+			description:"Presets for Digital gain control for Left and Right channels on Headphone. \nNote1: You MUST enable the Digital controls from above 1st!\n \nNote2: Pushing for the highest preset may endanger your hearing and handset's hardware, You have been warned!\n"
+		}},
+		{ SButton:{
+			label:"Low Preset",
+			action:"taiko_digi 1"
+		}},
+		{ SButton:{
+			label:"Medium Preset",
+			action:"taiko_digi 3"
+		}},
+		{ SButton:{
+			label:"High Preset",
+			action:"taiko_digi 5"
+		}},
+		{ SButton:{
+			label:"Extreme Preset",
+			action:"taiko_digi 7"
+		}},
+		{ SPane:{
+			title:"Speakers",
+        	        description:"Tapan Speaker controls."
+        	}},
+		{ STitleBar:{
+			title:"Enable Controls"
+		}},
+		{ SButton:{
+			label:"Enable Digital gain control",
+			action:"spk_dig on"
+		}},
+		{ STitleBar:{
+			title:"Disable Controls"
+		}},
+		{ SButton:{
+			label:"Disable Digital gain control",
+			action:"spk_dig off"
+		}},
+		{ SPane:{
+			title:"Digital Gain control",
+			description:"Presets for Digital gain control for speakers(Internal). \nNote1: This MOD is enabled by default!\n \nNote2: Pushing for the highest preset may endanger your hearing and handset's hardware, You have been warned!\n"
+		}},
+		{ SButton:{
+			label:"Low Preset",
+			action:"spk_dig 3"
+		}},
+		{ SButton:{
+			label:"Medium Preset",
+			action:"spk_dig 5"
+		}},
+		{ SButton:{
+			label:"High Preset",
+			action:"spk_dig 7"
+		}},
+		{ SButton:{
+			label:"Extreme Preset",
+			action:"spk_dig 9"
+		}},
+    	]
+}
+CTAG

@@ -1,0 +1,3 @@
+echo $1 > /sys/kernel/taiko/headset/hp_digigain
+
+echo "Done."

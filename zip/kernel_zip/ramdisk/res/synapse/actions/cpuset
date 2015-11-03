@@ -1,0 +1,30 @@
+CPU=/sys/devices/system/cpu;
+MAX=$CPU/cpu0/cpufreq/locked_max_limit;
+MIN=$CPU/cpu0/cpufreq/locked_min_limit;
+GOV=$CPU/cpu0/cpufreq/scaling_available_governor;
+
+if [ -f $1 ]; then
+	if [[ ! -z $2 ]]; then
+		echo $2 > $1
+
+		if [ "$1" = "$MAX" ]; then
+			echo $2 > $CPU/cpu0/cpufreq/scaling_max_freq;
+			for PATH in /sys/devices/system/cpu/cpu[1-3]; do
+				echo 1 > $PATH/online 2> /dev/null;
+				echo $2 > $PATH/cpufreq/locked_max_limit;
+				echo $2 > $PATH/cpufreq/scaling_max_freq 2> /dev/null;
+			done;
+		fi
+
+		if [ "$1" = "$GOV" ]; then
+			echo $2 > $CPU/cpu0/cpufreq/scaling_governor;
+			for PATH in /sys/devices/system/cpu/cpu[1-3]; do
+				echo 1 > $PATH/online 2> /dev/null;
+				echo $2 > $PATH/cpufreq/scaling_governor 2> /dev/null;
+			done;
+		fi
+		
+	fi
+
+	echo `cat $1`
+fi;

@@ -1,0 +1,18 @@
+#!/system/bin/sh
+
+cat << CTAG
+
+{
+    sections: [
+		`. /res/synapse/config.json.generate.status`
+		`. /res/synapse/config.json.generate.cpu`
+		`. /res/synapse/config.json.generate.gpu`
+		`. /res/synapse/config.json.generate.storage`
+		`. /res/synapse/config.json.generate.misc`
+		`. /res/synapse/config.json.generate.taiko`
+		`. /res/synapse/config.json.generate.tools`
+		`. /res/synapse/config.json.generate.info`
+    ]
+}
+
+CTAG

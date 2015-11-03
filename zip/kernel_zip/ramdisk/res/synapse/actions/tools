@@ -1,0 +1,94 @@
+if [ -d /data/data/com.af.synapse ]; then
+  	SYNAPSE_SD_DIR=/sdcard/Synapse;
+  	SYNAPSE_CONFIG_DIR=$SYNAPSE_SD_DIR/saved_profiles;
+  	SYNAPSE_DATA=/data/data/com.af.synapse/databases;
+
+  	[ ! -d "$SYNAPSE_CONFIG_DIR" ] && mkdir -p "$SYNAPSE_CONFIG_DIR";
+  	[ ! -f "$SYNAPSE_CONFIG_DIR/.selected_config_profile" -o -z `cat "$SYNAPSE_CONFIG_DIR/.selected_config_profile"` ] && echo "None" > "$SYNAPSE_CONFIG_DIR/.selected_config_profile";
+
+  	SYNAPSE_CONFIG_PROFILE=`cat "$SYNAPSE_CONFIG_DIR/.selected_config_profile"`;
+fi;
+
+TIMESTAMP=`date +%Y-%m-%d.%H.%M.%S`;
+LOGS=$SYNAPSE_SD_DIR/logs;
+
+reset_uci() {
+  	/res/synapse/uci reset;
+  	/res/synapse/uci;
+}
+
+case $1 in
+listconfig)
+    	echo `ls "$SYNAPSE_CONFIG_DIR"`
+  	;;
+pickconfig)
+    	if [ -f "$SYNAPSE_CONFIG_DIR/$2" -o "$2" == "None" ]; then
+      		echo "$2" > "$SYNAPSE_CONFIG_DIR/.selected_config_profile";
+    	fi;
+    		echo `cat "$SYNAPSE_CONFIG_DIR/.selected_config_profile"`;
+  	;;
+applyconfig)
+    	if [ -f "$SYNAPSE_CONFIG_DIR/$SYNAPSE_CONFIG_PROFILE" ]; then
+      		rm -f $SYNAPSE_DATA/*
+      		cd $SYNAPSE_DATA
+      		tar -xz -f "$SYNAPSE_CONFIG_DIR/$SYNAPSE_CONFIG_PROFILE";
+      		echo "$SYNAPSE_CONFIG_PROFILE restored. Restart Synapse to refresh.";
+      		reset_uci;
+    	elif [ "$SYNAPSE_CONFIG_PROFILE" == "None" ]; then
+      		echo "  None selected  ";
+    	else
+      		echo "  File not found  ";
+    	fi;
+  	;;
+keepconfig)
+    	timestamp=`date +%Y-%m-%d.%H.%M.%S`;
+    	cd $SYNAPSE_DATA
+    	tar -cz -f "$SYNAPSE_CONFIG_DIR/config-$timestamp.tgz" *;
+    	echo " config-$timestamp.tgz created. Restart Synapse to see updated list. ";
+    	reset_uci;
+  	;;
+delconfig)
+    	if [ -f "$SYNAPSE_CONFIG_DIR/$SYNAPSE_CONFIG_PROFILE" ]; then
+      		rm -f "$SYNAPSE_CONFIG_DIR/$SYNAPSE_CONFIG_PROFILE";
+      		echo "$SYNAPSE_CONFIG_PROFILE removed. Restart Synapse to see updated list.";
+      		reset_uci;
+    	elif [ "$SYNAPSE_CONFIG_PROFILE" == "None" ]; then
+      		echo "  None selected  ";
+    	else
+      		echo "  File not found  ";
+    	fi;
+  	;;
+restart)
+	am force-stop com.af.synapse 2> /dev/null;
+    	sleep 1;
+    	reset_uci;
+    	sleep 1;
+    	am start -a android.intent.action.MAIN -n com.af.synapse/.MainActivity 2> /dev/null;
+  	;;
+logcat)
+	saved="$LOGS/logcat-$TIMESTAMP.txt";
+	[ ! -d "$LOGS" ] && $BB mkdir -p "$LOGS";
+	$BB chmod 755 $LOGS;
+	logcat -d > $saved;
+	echo "  logcat successfully generated!  ";
+	;;
+dmesg)
+	saved="$LOGS/dmesg-$TIMESTAMP.txt";
+	[ ! -d "$LOGS" ] && $BB mkdir -p "$LOGS";
+	$BB chmod 755 $LOGS;
+	$BB dmesg > $saved;
+	echo "  dmesg successfully generated!  ";
+	;;
+kmsg)
+	kmsg=/proc/last_kmsg;
+	if [ -f $kmsg ]; then
+		saved="$LOGS/last_kmsg-$TIMESTAMP.txt";
+		[ ! -d "$LOGS" ] && $BB mkdir -p "$LOGS";
+		$BB chmod 755 $LOGS;
+		$BB cp -f $kmsg $saved;
+		echo "  last_kmsg successfully generated!  ";
+	else
+		$BB echo "  $kmsg not found.  ";
+	fi;
+	;;
+esac

@@ -1,0 +1,51 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:Information,
+    elements:[
+        { SPane:{
+                title:"Disclaimer",
+                description:"Your warranty is now void. I'm not responsible for bricked devices, dead SD cards, and likes!"
+        }},
+	{ SPane:{
+		title:"Android Device",
+		description:"`getprop ro.product.model` (`getprop ro.product.device`)"
+	}},
+	{ SPane:{
+		title:"Android Version",
+		description:"`getprop ro.build.version.release`-`getprop ro.build.id`-`getprop ro.build.description`"
+	}},
+	{ SPane:{
+		title:"Linux Kernel Version",
+                description:"`cat /proc/version`"
+	}},
+	{ STitleBar:{
+		title:"Baseband"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"show baseband"
+	}},
+	{ STitleBar:{
+		title:"Serial Number"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"show serial"
+	}},
+	{ SPane:{
+		title:"Credits",
+		description:"Credit goes to these special <a href='https://github.com/zeroblade1984/HTC-One-M7/wiki/Credits'>people</a> who have been inspiration of my work and to all who donated to help fund this project."
+	}},
+	{ SPane:{
+		title:"Github source",
+		description:"Sources and info are available at my <a href='https://github.com/zeroblade1984'>Github page</a>."
+	}},
+	{ SButton:{
+		label:"Every Cent is appreciated!!",
+		action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/donatetome.php?u=3637908"
+	}},
+    ]
+}
+CTAG

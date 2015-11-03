@@ -1,0 +1,32 @@
+#!/system/bin/sh
+OPTS='0:"Disabled", 1:"Enabled"'
+
+cat << CTAG
+{
+    name:GPU,
+    elements:[
+	{ SDescription:{
+                description:"Configure GPU parameters to give you a better UI experience."
+        }},
+	{ SPane:{
+		title:"GPU frequency"
+	}},
+	{ SLiveLabel:{
+		refresh:1000,
+		action:"show gpu"
+	}},
+	{ SPane:{
+		title:"GPU Frequency"
+	}},
+	{ SSeekBar:{
+		title:"Set maximum GPU frequency",
+		description:"Set the maximum frequency for the GPU.",
+		unit:" Mhz",
+		weight:0.000001,
+		default:`cat /sys/class/kgsl/kgsl-3d0/max_gpuclk`,
+		action:"generic /sys/class/kgsl/kgsl-3d0/max_gpuclk",
+		values:[`while read values; do busybox printf "%s, \n" $values; done < /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies`]
+	}},
+    ]
+}
+CTAG

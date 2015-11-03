@@ -1,0 +1,3 @@
+echo $1 > /sys/kernel/krait_uv_info/krait_uV
+
+echo "Done."

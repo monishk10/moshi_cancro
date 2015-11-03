@@ -1,0 +1,100 @@
+#!/system/bin/sh
+OPTIONS='0:"Disabled", 1:"Enabled"'
+HP='1:"Disabled", 2:"Enabled"'
+
+cat << CTAG
+{
+    name:Hotplug,
+    elements:[
+	{ SDescription:{
+                description:"Hotplug Parameters Control Panel."
+        }},
+	{ SPane:{
+		title:"Hotplug driver stats"
+	}},
+	{ SLiveLabel:{
+		refresh:500,
+		action:"show load"
+	}},
+    	{ SPane:{
+		title:"Boost Controls",
+    	}},
+	{ SOptionList:{
+		title:"Input event boost",
+		description:"The number of CPU's to be boosted during input events.",
+		default:`cat /sys/module/msm_hotplug/input_boost`,
+		action:"generic /sys/module/msm_hotplug/input_boost",
+		values:{ $OPTIONS }
+	}},
+	{ SSeekBar:{
+		title:"Boost period before CPU(N) goes offline",
+		description:"Control the time before a CPU goes offline.",
+		max:5000,
+		min:500,
+		step:500,
+		unit:" ms",
+		default:`cat /sys/module/msm_hotplug/down_lock_duration`,
+		action:"generic /sys/module/msm_hotplug/down_lock_duration"
+	}},
+	{ SSeekBar:{
+		title:"Boost period for CPU(N)",
+		description:"Control the boost time for a CPU when it goes online.",
+		max:5000,
+		min:500,
+		step:500,
+		unit:" ms",
+		default:`cat /sys/module/msm_hotplug/boost_lock_duration`,
+		action:"generic /sys/module/msm_hotplug/boost_lock_duration"
+	}},
+    	{ SPane:{
+		title:"Sampling Related Options",
+    	}},
+	{ SGeneric:{
+		title:"Sampling update rate",
+		description:"Control the aggressiveness/Interval of taking samples of load across the System.(Lower values tend to be more aggressive)",
+		default:`cat /sys/module/msm_hotplug/update_rates`,
+		action:"generic /sys/module/msm_hotplug/update_rates"
+	}},
+	{ SSeekBar:{
+		title:"Fast-lane load",
+		description:"Improve latencies by instantly onlining all cpus if current load on any cpu is above this threshold value.",
+		max:300,
+		min:10,
+		step:1,
+		unit:" %",
+		default:`cat /sys/module/msm_hotplug/fast_lane_load`,
+		action:"generic /sys/module/msm_hotplug/fast_lane_load"
+	}},
+	{ SSeekBar:{
+		title:"Offline load",
+		description:"Desired load under which a cpu is never offlined(important for very short forced online intervals).",
+		max:100,
+		min:0,
+		step:1,
+		unit:" %",
+		default:`cat /sys/module/msm_hotplug/offline_load`,
+		action:"generic /sys/module/msm_hotplug/offline_load"
+	}},
+	{ SPane:{
+		title:"Core Control"
+	}},
+	{ SOptionList:{
+		title:"Maximum number of cores to participate on Hotplug activity",
+		description:"Depends on how many cores are present on your system, would also depend on how many cores you want to utilize.",
+		default:`cat /sys/module/msm_hotplug/max_cpus_online`,
+		action:"generic /sys/module/msm_hotplug/max_cpus_online",
+		values:[2, 3, 4,]
+	}},
+	{ SPane:{
+		title:"Input/Output"
+	}},
+	{ SOptionList:{
+		title:"I/O is Busy",
+		description:"Considers the I/O time as CPU load time. Usually will have more time on highest frequency when enabled.",
+		default:`cat /sys/module/msm_hotplug/io_is_busy`,
+		action:"generic /sys/module/msm_hotplug/io_is_busy",
+		values:{ $OPTIONS }
+	}},
+    ]
+}
+CTAG
