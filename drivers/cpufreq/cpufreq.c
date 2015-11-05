@@ -1075,8 +1075,6 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
 		cpu, policy->min, policy->max);
 
 
-#endif
-
 	ret = cpufreq_add_dev_interface(cpu, policy, dev);
 	if (ret)
 		goto err_out_unregister;
