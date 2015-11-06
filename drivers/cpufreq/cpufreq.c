@@ -661,6 +661,7 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 	return sprintf(buf, "%u\n", policy->cpuinfo.max_freq);
 }
 
+
 #ifdef CONFIG_CPU_VOLTAGE_TABLE
 extern ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf);
 extern ssize_t store_UV_mV_table(struct cpufreq_policy *policy,
@@ -685,6 +686,9 @@ cpufreq_freq_attr_rw(UV_mV_table);
 cpufreq_freq_attr_rw(scaling_max_freq);
 cpufreq_freq_attr_rw(scaling_governor);
 cpufreq_freq_attr_rw(scaling_setspeed);
+#ifdef CONFIG_MSM_CPU_VOLTAGE_CONTROL
+cpufreq_freq_attr_rw(UV_mV_table);
+#endif
 
 static struct attribute *default_attrs[] = {
 	&cpuinfo_min_freq.attr,
@@ -1088,7 +1092,6 @@ static int cpufreq_add_dev(struct device *dev, struct subsys_interface *sif)
 		cpu, policy->min, policy->max);
 
 
-#endif
 
 	ret = cpufreq_add_dev_interface(cpu, policy, dev);
 	if (ret)
@@ -2077,3 +2080,4 @@ static int __init cpufreq_core_init(void)
 	return 0;
 }
 core_initcall(cpufreq_core_init);
+
