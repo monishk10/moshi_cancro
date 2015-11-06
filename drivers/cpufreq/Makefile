@@ -15,6 +15,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_ELEMENTALX)	+= cpufreq_elementalx.o
 obj-$(CONFIG_CPU_FREQ_GOV_ONDEMANDPLUS)	+= cpufreq_ondemandplus.o
 obj-$(CONFIG_CPU_FREQ_GOV_YANKACTIVE)	+= cpufreq_yankactive.o
 obj-$(CONFIG_CPU_FREQ_GOV_IMPULSE)	+= cpufreq_impulse.o
+obj-$(CONFIG_CPU_FREQ_GOV_HYPER)  	+= cpufreq_HYPER.o
 
 # CPUfreq cross-arch helpers
 obj-$(CONFIG_CPU_FREQ_TABLE)		+= freq_table.o
