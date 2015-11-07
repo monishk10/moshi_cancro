@@ -73,7 +73,7 @@ function make_kernel {
 
 function make_zip {
 		cd $REPACK_DIR
-		zip -r9 ~/builds/$MOSHI_F/MOSHI-$MOSHI_F-$(date +%d-%m_%H%M)-$VER.zip *
+		zip -r9 ~/builds/$MOSHI_F/MOSHI-$MOSHI_F-$(date +%d-%m_%H%M).zip *
 }
 
 function copy_modules {
@@ -102,6 +102,30 @@ case "$mchoice" in
 		MOSHI_F="cancro"
 		echo
 		echo "Named cancro"
+		break
+		;;
+	oc|OC )
+		MOSHI_F="oc"
+		echo
+		echo "Named oc"
+		break
+		;;
+	dt2w|DT2W )
+		MOSHI_F="dt2w"
+		echo
+		echo "Named dt2w"
+		break
+		;;
+	od|OD )
+		MOSHI_F="oc_dt2w"
+		echo
+		echo "Named oc dt2w"
+		break
+		;;
+	s|S )
+		MOSHI_F="stock"
+		echo
+		echo "Named stock"
 		break
 		;;
 	* )
