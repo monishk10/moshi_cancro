@@ -51,8 +51,8 @@ export KBUILD_BUILD_HOST="beast"
 #STRIP=/toolchain-path/arm-eabi-strip
 STRIP=/home/monish/arm-eabi-5.2/bin/arm-eabi-strip
 KERNEL_DIR=`pwd`
-REPACK_DIR="$KERNEL_DIR/zip/kernel_zip"
-PATCH_DIR="$KERNEL_DIR/zip/kernel_zip/patch"
+REPACK_DIR="$KERNEL_DIR/zip1/kernel_zip"
+PATCH_DIR="$KERNEL_DIR/zip1/kernel_zip/patch"
 ZIMAGE_DIR="$KERNEL_DIR/arch/arm/boot"
 # Functions
 
@@ -93,31 +93,6 @@ echo "Making MOSHI Kernel:"
 echo "-----------------"
 echo -e "${restore}"
 
-case "$1" in
-clean|cleanbuild)
-clean_all
-make_kernel
-make_dtb
-if [ -e "arch/arm/boot/zImage" ]; then
-make_zip
-else
-echo -e "Error Occurred"
-echo -e "zImage not found"
-exit 1
-fi
-;;
-dirty)
-make_kernel
-make_dtb
-if [ -e "arch/arm/boot/zImage" ]; then
-make_zip
-else
-echo -e "Error Occurred"
-echo -e "zImage not found"
-exit 1
-fi
-;;
-*)
 echo -e "${bldblu}"
 while read -p "Which branch (c)? " mchoice
 echo -e "${bldred}"
@@ -165,10 +140,15 @@ do
 case "$dchoice" in
 	y|Y)
 		make_kernel
-		make_dtb
-		copy_modules
 		if [ -e "arch/arm/boot/zImage" ]; then
+		make_dtb		
+		copy_modules
 		make_zip
+		else
+		echo -e "${bldred}"
+		echo "Kernel Compilation failed, zImage not found"
+		echo -e "${restore}"
+		exit 1
 		fi
 		break
 		;;
@@ -182,8 +162,6 @@ case "$dchoice" in
 		;;
 esac
 done
-;;
-esac
 echo -e "${bldgrn}"
 echo "MOSHI-$MOSHI_F-$(date +%d-%m_%H%M)-$VER.zip"
 echo -e "${bldred}"
