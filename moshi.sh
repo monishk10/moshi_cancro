@@ -42,17 +42,17 @@ VER="v3"
 MOSHI_VER="$BASE_MOSHI_VER$VER"
 
 # Vars
-export CROSS_COMPILE="/home/monish/arm-eabi-5.2/bin/arm-eabi-"
+export CROSS_COMPILE="/home/monish/arm-eabi-4.8/bin/arm-eabi-"
 export ARCH=arm
 export SUBARCH=arm
 export KBUILD_BUILD_USER="monish"
 export KBUILD_BUILD_HOST="beast"
 # Paths
 #STRIP=/toolchain-path/arm-eabi-strip
-STRIP=/home/monish/arm-eabi-5.2/bin/arm-eabi-strip
+STRIP=/home/monish/arm-eabi-4.8/bin/arm-eabi-strip
 KERNEL_DIR=`pwd`
-REPACK_DIR="$KERNEL_DIR/zip1/kernel_zip"
-PATCH_DIR="$KERNEL_DIR/zip1/kernel_zip/patch"
+REPACK_DIR="$KERNEL_DIR/zip2/kernel_zip"
+PATCH_DIR="$KERNEL_DIR/zip2/kernel_zip/patch"
 ZIMAGE_DIR="$KERNEL_DIR/arch/arm/boot"
 # Functions
 

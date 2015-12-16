@@ -86,12 +86,19 @@ GTAGS
 
 
 *.orig
+kernel/hz.bc
+zip/
 zip/*.zip
 zip/kernel_zip/zImage
 zip/kernel_zip/dtb
 zip/kernel_zip
+zip1/
 zip1/*.zip
 zip1/kernel_zip/zImage
 zip1/kernel_zip/dtb
+zip2/
+zip2/*.zip
+zip2/kernel_zip/zImage
+zip2/kernel_zip/dtb
 *~
 \#*#
